@@ -1,10 +1,10 @@
 import { Metadata } from 'next';
-import LoginPage from './LoginPage';
+import OnboardingPage from './OnboardingPage';
 
 export default async function () {
-  return <LoginPage />;
+  return <OnboardingPage />;
 }
 
 export const metadata: Metadata = {
-  title: 'Login',
+  title: 'Welcome to Oravo',
 };

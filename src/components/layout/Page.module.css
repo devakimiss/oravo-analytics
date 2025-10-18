@@ -10,3 +10,15 @@
   min-height: calc(100vh - 60px);
   min-height: calc(100dvh - 60px);
 }
+
+@media only screen and (max-width: 768px) {
+  .page {
+    padding: 0 15px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .page {
+    padding: 0 10px;
+  }
+}

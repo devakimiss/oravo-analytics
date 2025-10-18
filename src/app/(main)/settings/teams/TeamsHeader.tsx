@@ -8,12 +8,11 @@ import TeamsAddButton from './TeamsAddButton';
 export function TeamsHeader({ allowCreate = true }: { allowCreate?: boolean }) {
   const { formatMessage, labels } = useMessages();
   const { user } = useLogin();
-  const cloudMode = !!process.env.cloudMode;
 
   return (
     <PageHeader title={formatMessage(labels.teams)}>
       <Flexbox gap={10}>
-        {!cloudMode && <TeamsJoinButton />}
+        <TeamsJoinButton />
         {allowCreate && user.role !== ROLES.viewOnly && <TeamsAddButton />}
       </Flexbox>
     </PageHeader>

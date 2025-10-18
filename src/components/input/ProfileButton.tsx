@@ -11,7 +11,6 @@ export function ProfileButton() {
   const { user } = useLogin();
   const router = useRouter();
   const { dir } = useLocale();
-  const cloudMode = !!process.env.cloudMode;
 
   const handleSelect = (key: Key, close: () => void) => {
     if (key === 'profile') {
@@ -40,14 +39,12 @@ export function ProfileButton() {
               </Icon>
               <Text>{formatMessage(labels.profile)}</Text>
             </Item>
-            {!cloudMode && (
-              <Item data-test="item-logout" key="logout" className={styles.item}>
-                <Icon>
-                  <Icons.Logout />
-                </Icon>
-                <Text>{formatMessage(labels.logout)}</Text>
-              </Item>
-            )}
+            <Item data-test="item-logout" key="logout" className={styles.item}>
+              <Icon>
+                <Icons.Logout />
+              </Icon>
+              <Text>{formatMessage(labels.logout)}</Text>
+            </Item>
             <div className={styles.version}>{`v${CURRENT_VERSION}`}</div>
           </Menu>
         )}

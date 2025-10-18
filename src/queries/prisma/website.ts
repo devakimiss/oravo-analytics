@@ -159,7 +159,6 @@ export async function resetWebsite(
   websiteId: string,
 ): Promise<[Prisma.BatchPayload, Prisma.BatchPayload, Website]> {
   const { client, transaction } = prisma;
-  const cloudMode = !!process.env.cloudMode;
 
   return transaction([
     client.eventData.deleteMany({
@@ -181,10 +180,6 @@ export async function resetWebsite(
       },
     }),
   ]).then(async data => {
-    if (cloudMode) {
-      await redis.client.set(`website:${websiteId}`, data[3]);
-    }
-
     return data;
   });
 }
@@ -193,7 +188,6 @@ export async function deleteWebsite(
   websiteId: string,
 ): Promise<[Prisma.BatchPayload, Prisma.BatchPayload, Website]> {
   const { client, transaction } = prisma;
-  const cloudMode = !!process.env.CLOUD_MODE;
 
   return transaction([
     client.eventData.deleteMany({
@@ -213,21 +207,10 @@ export async function deleteWebsite(
         websiteId,
       },
     }),
-    cloudMode
-      ? client.website.update({
-          data: {
-            deletedAt: new Date(),
-          },
-          where: { id: websiteId },
-        })
-      : client.website.delete({
-          where: { id: websiteId },
-        }),
+    client.website.delete({
+      where: { id: websiteId },
+    }),
   ]).then(async data => {
-    if (cloudMode) {
-      await redis.client.del(`website:${websiteId}`);
-    }
-
     return data;
   });
 }

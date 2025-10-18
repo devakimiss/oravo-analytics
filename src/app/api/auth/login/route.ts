@@ -25,7 +25,19 @@ export async function POST(request: Request) {
 
   const user = await getUserByUsername(username, { includePassword: true });
 
-  if (!user || !checkPassword(password, user.password)) {
+  if (!user) {
+    // eslint-disable-next-line no-console
+    console.log('Login failed: User not found -', username);
+    return unauthorized('message.incorrect-username-password');
+  }
+
+  const passwordMatch = checkPassword(password, user.password);
+  
+  if (!passwordMatch) {
+    // eslint-disable-next-line no-console
+    console.log('Login failed: Password mismatch for user -', username);
+    // eslint-disable-next-line no-console
+    console.log('Stored hash length:', user.password?.length);
     return unauthorized('message.incorrect-username-password');
   }
 

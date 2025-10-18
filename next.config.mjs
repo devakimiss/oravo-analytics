@@ -156,25 +156,7 @@ if (trackerScriptName) {
   }
 }
 
-if (cloudMode && cloudUrl) {
-  redirects.push({
-    source: '/settings/:path*',
-    destination: `${cloudUrl}/settings/:path*`,
-    permanent: false,
-  });
-
-  redirects.push({
-    source: '/teams/:id/settings/:path*',
-    destination: `${cloudUrl}/teams/:id/settings/:path*`,
-    permanent: false,
-  });
-
-  redirects.push({
-    source: '/login',
-    destination: cloudUrl,
-    permanent: false,
-  });
-}
+// Removed cloudMode redirects - all features are now unlocked
 
 /** @type {import('next').NextConfig} */
 export default {

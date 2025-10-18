@@ -2,7 +2,6 @@ import { Prisma } from '@prisma/client';
 import { ROLES } from '@/lib/constants';
 import prisma from '@/lib/prisma';
 import { PageResult, Role, User, PageParams } from '@/lib/types';
-import { getRandomChars } from '@/lib/crypto';
 import UserFindManyArgs = Prisma.UserFindManyArgs;
 
 export interface GetUserOptions {
@@ -77,18 +76,22 @@ export async function createUser(data: {
   id: string;
   username: string;
   password: string;
+  email?: string | null;
+  emailVerified?: boolean;
+  verificationToken?: string | null;
+  onboardingCompleted?: boolean;
   role: Role;
-}): Promise<{
-  id: string;
-  username: string;
-  role: string;
-}> {
+}): Promise<any> {
   return prisma.client.user.create({
     data,
     select: {
       id: true,
       username: true,
+      email: true,
+      emailVerified: true,
+      onboardingCompleted: true,
       role: true,
+      createdAt: true,
     },
   });
 }
@@ -122,7 +125,6 @@ export async function deleteUser(
   ]
 > {
   const { client, transaction } = prisma;
-  const cloudMode = process.env.CLOUD_MODE;
 
   const websites = await client.website.findMany({
     where: { userId },
@@ -146,26 +148,6 @@ export async function deleteUser(
   });
 
   const teamIds = teams.map(a => a.id);
-
-  if (cloudMode) {
-    return transaction([
-      client.website.updateMany({
-        data: {
-          deletedAt: new Date(),
-        },
-        where: { id: { in: websiteIds } },
-      }),
-      client.user.update({
-        data: {
-          username: getRandomChars(32),
-          deletedAt: new Date(),
-        },
-        where: {
-          id: userId,
-        },
-      }),
-    ]);
-  }
 
   return transaction([
     client.eventData.deleteMany({

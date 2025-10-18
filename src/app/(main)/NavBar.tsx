@@ -18,8 +18,6 @@ export function NavBar() {
   const { pathname, router } = useNavigation();
   const { teamId, renderTeamUrl } = useTeamUrl();
 
-  const cloudMode = !!process.env.cloudMode;
-
   const links = [
     { label: formatMessage(labels.dashboard), url: renderTeamUrl('/dashboard') },
     { label: formatMessage(labels.websites), url: renderTeamUrl('/websites') },
@@ -32,7 +30,7 @@ export function NavBar() {
       label: formatMessage(labels.dashboard),
       url: renderTeamUrl('/dashboard'),
     },
-    !cloudMode && {
+    {
       label: formatMessage(labels.settings),
       url: renderTeamUrl('/settings'),
       children: [
@@ -71,28 +69,24 @@ export function NavBar() {
       label: formatMessage(labels.profile),
       url: '/profile',
     },
-    !cloudMode && { label: formatMessage(labels.logout), url: '/logout' },
+    { label: formatMessage(labels.logout), url: '/logout' },
   ].filter(n => n);
 
   const handleTeamChange = (teamId: string) => {
     const url = teamId ? `/teams/${teamId}` : '/';
-    if (!cloudMode) {
-      setItem('umami.team', { id: teamId });
-    }
-    router.push(cloudMode ? `${process.env.cloudUrl}${url}` : url);
+    setItem('oravo.team', { id: teamId });
+    router.push(url);
   };
 
   useEffect(() => {
-    if (!cloudMode) {
-      const teamIdLocal = getItem('umami.team')?.id;
+    const teamIdLocal = getItem('oravo.team')?.id;
 
-      if (teamIdLocal && teamIdLocal !== teamId) {
-        router.push(
-          pathname !== '/' && pathname !== '/dashboard' ? '/' : `/teams/${teamIdLocal}/dashboard`,
-        );
-      }
+    if (teamIdLocal && teamIdLocal !== teamId) {
+      router.push(
+        pathname !== '/' && pathname !== '/dashboard' ? '/' : `/teams/${teamIdLocal}/dashboard`,
+      );
     }
-  }, [cloudMode]);
+  }, []);
 
   return (
     <div className={styles.navbar}>
@@ -100,7 +94,7 @@ export function NavBar() {
         <Icon size="lg">
           <Icons.Logo />
         </Icon>
-        <Text>umami</Text>
+        <Text>Oravo</Text>
       </div>
       <div className={styles.links}>
         {links.map(({ url, label }) => {

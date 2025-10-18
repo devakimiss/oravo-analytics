@@ -1,11 +1,7 @@
-<p align="center">
-  <img src="https://content.umami.is/website/images/umami-logo.png" alt="Umami Logo" width="100">
-</p>
-
-<h1 align="center">Umami</h1>
+<h1 align="center">Oravo</h1>
 
 <p align="center">
-  <i>Umami is a simple, fast, privacy-focused alternative to Google Analytics.</i>
+  <i>Oravo is a modern, privacy-focused analytics platform for your websites.</i>
 </p>
 
 <p align="center">
@@ -27,7 +23,7 @@
 
 ## 🚀 Getting Started
 
-A detailed getting started guide can be found at [umami.is/docs](https://umami.is/docs/).
+Welcome to Oravo - your privacy-focused analytics solution.
 
 ---
 
@@ -36,25 +32,36 @@ A detailed getting started guide can be found at [umami.is/docs](https://umami.i
 ### Requirements
 
 - A server with Node.js version 18.18 or newer
-- A database. Umami supports [MariaDB](https://www.mariadb.org/) (minimum v10.5), [MySQL](https://www.mysql.com/) (minimum v8.0) and [PostgreSQL](https://www.postgresql.org/) (minimum v12.14) databases.
+- A database. Oravo supports [MariaDB](https://www.mariadb.org/) (minimum v10.5), [MySQL](https://www.mysql.com/) (minimum v8.0) and [PostgreSQL](https://www.postgresql.org/) (minimum v12.14) databases.
 
 ### Get the Source Code and Install Packages
 
 ```bash
-git clone https://github.com/umami-software/umami.git
-cd umami
+git clone https://github.com/oravo/oravo.git
+cd oravo
 pnpm install
 ```
 
-### Configure Umami
+### Configure Oravo
 
 Create an `.env` file with the following:
 
 ```bash
-DATABASE_URL=connection-url
+# Database (Required)
+DATABASE_URL=postgresql://username:mypassword@localhost:5432/mydb
+
+# App URL (Required)
+APP_URL=http://localhost:3000
+
+# SendGrid Email Configuration (Optional - for email verification)
+# Get your API key at: https://app.sendgrid.com/settings/api_keys
+# See SENDGRID_SETUP.md for detailed setup instructions
+# If not configured, verification URLs will be displayed in console
+SENDGRID_API_KEY=SG.your-sendgrid-api-key-here
+SENDGRID_FROM_EMAIL=noreply@yourdomain.com
 ```
 
-The connection URL format:
+**Database URL formats:**
 
 ```bash
 postgresql://username:mypassword@localhost:5432/mydb
@@ -67,7 +74,19 @@ mysql://username:mypassword@localhost:3306/mydb
 pnpm run build
 ```
 
-_The build step will create tables in your database if you are installing for the first time. It will also create a login user with username **admin** and password **umami**._
+_The build step will create tables in your database if you are installing for the first time. It will also create a login user with username **admin** and password **oravo**._
+
+### Run Database Migrations
+
+After the build, run the email verification migration:
+
+```bash
+# For PostgreSQL
+psql -d your_database < db/postgresql/migrations/01_add_email_verification.sql
+
+# Or run migrations through Prisma
+pnpm prisma migrate deploy
+```
 
 ### Start the Application
 

@@ -1,13 +1,13 @@
 {
-  "name": "umami",
+  "name": "oravo",
   "version": "2.19.0",
-  "description": "A modern, privacy-focused alternative to Google Analytics.",
-  "author": "Umami Software, Inc. <hello@umami.is>",
+  "description": "A modern, privacy-focused analytics platform.",
+  "author": "Oravo Analytics",
   "license": "MIT",
-  "homepage": "https://umami.is",
+  "homepage": "https://oravo.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/umami-software/umami.git"
+    "url": "https://github.com/oravo/oravo.git"
   },
   "scripts": {
     "dev": "next dev",
@@ -75,6 +75,7 @@
     "@prisma/client": "6.7.0",
     "@prisma/extension-read-replicas": "^0.4.1",
     "@react-spring/web": "^9.7.3",
+    "@sendgrid/mail": "^8.1.6",
     "@tanstack/react-query": "^5.28.6",
     "@umami/redis-client": "^0.26.0",
     "bcryptjs": "^2.4.3",
@@ -106,6 +107,7 @@
     "md5": "^2.3.0",
     "next": "15.4.7",
     "node-fetch": "^3.2.8",
+    "nodemailer": "^6.9.7",
     "npm-run-all": "^4.1.5",
     "papaparse": "^5.5.3",
     "prisma": "6.7.0",
@@ -139,6 +141,7 @@
     "@svgr/webpack": "^8.1.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.4",
+    "@types/nodemailer": "^6.4.14",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.2",
     "@types/react-window": "^1.8.8",
