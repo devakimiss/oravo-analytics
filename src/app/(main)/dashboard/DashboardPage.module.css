@@ -150,10 +150,14 @@
 
 .actionCard:hover {
   background: var(--base100);
-  border-color: #000000;
+  border-color: var(--primary500);
   border-style: solid;
   transform: translateY(-3px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme='dark'] .actionCard:hover {
+  border-color: #ffffff;
 }
 
 .actionIcon {
@@ -162,22 +166,29 @@
   display: block;
   line-height: 1;
   opacity: 1;
-  filter: brightness(1.1) contrast(1.1);
 }
 
 .actionTitle {
   font-weight: 700;
   font-size: 16px;
   margin-bottom: 6px;
-  color: var(--font-color);
+  color: #000000;
   letter-spacing: -0.2px;
+}
+
+[data-theme='dark'] .actionTitle {
+  color: #ffffff;
 }
 
 .actionDescription {
   font-size: 14px;
-  color: var(--font-color200);
+  color: #666666;
   line-height: 1.4;
   font-weight: 500;
+}
+
+[data-theme='dark'] .actionDescription {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .recentActivity {
