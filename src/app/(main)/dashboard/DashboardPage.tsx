@@ -45,13 +45,19 @@ export function DashboardPage() {
       {!editing && (
         <div className={styles.welcomeSection}>
           <div className={styles.welcomeContent}>
-            <h1 className={styles.welcomeTitle}>
-              {getGreeting()}, {user?.username || 'there'}! 👋
-            </h1>
-            <p className={styles.welcomeSubtitle}>
-              Welcome to your Oravo analytics dashboard. Track your website performance in
-              real-time.
-            </p>
+            <div className={styles.welcomeEmoji}>{getGreetingEmoji()}</div>
+            <div className={styles.welcomeInfo}>
+              <h1 className={styles.welcomeTitle}>
+                {getGreeting()}, {user?.username || 'there'}!
+              </h1>
+              <p className={styles.welcomeSubtitle}>
+                Welcome to your Oravo analytics dashboard. Track your website performance in real-time.
+              </p>
+            </div>
+            <div className={styles.welcomeTime}>
+              <div className={styles.timeDisplay}>{formatTime(currentTime)}</div>
+              <div className={styles.dateDisplay}>{formatDate(currentTime)}</div>
+            </div>
           </div>
         </div>
       )}
