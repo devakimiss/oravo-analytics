@@ -1,18 +1,12 @@
-import { createTransport } from 'nodemailer';
+import sgMail from '@sendgrid/mail';
 
-const emailEnabled = !!process.env.SMTP_HOST;
+// Initialize SendGrid with API key
+const sendgridApiKey = process.env.SENDGRID_API_KEY;
+const emailEnabled = !!sendgridApiKey;
 
-const transporter = emailEnabled
-  ? createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: process.env.SMTP_SECURE === 'true',
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-      },
-    })
-  : null;
+if (emailEnabled) {
+  sgMail.setApiKey(sendgridApiKey);
+}
 
 export interface EmailOptions {
   to: string;
@@ -22,34 +16,39 @@ export interface EmailOptions {
 }
 
 export async function sendEmail({ to, subject, html, text }: EmailOptions) {
-  if (!emailEnabled || !transporter) {
+  if (!emailEnabled) {
     // eslint-disable-next-line no-console
-    console.log('\n⚠️  SMTP NOT CONFIGURED - Email not sent');
+    console.log('\n⚠️  SENDGRID NOT CONFIGURED - Email not sent');
     // eslint-disable-next-line no-console
     console.log('   To:', to);
     // eslint-disable-next-line no-console
     console.log('   Subject:', subject);
     // eslint-disable-next-line no-console
-    console.log('   Configure SMTP in .env to send emails\n');
+    console.log('   Set SENDGRID_API_KEY in .env to send emails');
+    // eslint-disable-next-line no-console
+    console.log('   Get your API key at: https://app.sendgrid.com/settings/api_keys\n');
     return { success: false, message: 'Email service not configured' };
   }
 
   try {
-    await transporter.sendMail({
-      from: process.env.SMTP_FROM || 'noreply@oravo.com',
+    await sgMail.send({
       to,
+      from: process.env.SENDGRID_FROM_EMAIL || 'noreply@oravo.com',
       subject,
       html,
-      text,
+      text: text || subject,
     });
 
     // eslint-disable-next-line no-console
     console.log('✅ Email sent successfully to:', to);
     return { success: true };
-  } catch (error) {
+  } catch (error: any) {
     // eslint-disable-next-line no-console
-    console.error('❌ Error sending email:', error);
-    return { success: false, message: error instanceof Error ? error.message : 'Unknown error' };
+    console.error('❌ SendGrid Error:', error.response?.body || error.message);
+    return {
+      success: false,
+      message: error.response?.body?.errors?.[0]?.message || error.message || 'Unknown error',
+    };
   }
 }
 
