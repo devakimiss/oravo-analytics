@@ -24,6 +24,13 @@ export function DashboardPage() {
   const { page } = params;
   const hasData = !!result?.data?.length;
 
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const handlePageChange = (page: number) => {
     setParams({ ...params, page });
   };
@@ -33,6 +40,29 @@ export function DashboardPage() {
     if (hour < 12) return 'Good morning';
     if (hour < 18) return 'Good afternoon';
     return 'Good evening';
+  };
+
+  const getGreetingEmoji = () => {
+    const hour = currentTime.getHours();
+    if (hour < 12) return '☀️';
+    if (hour < 18) return '👋';
+    return '🌙';
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+  };
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+    });
   };
 
   if (query.isLoading) {
