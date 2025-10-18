@@ -23,9 +23,14 @@ export interface EmailOptions {
 
 export async function sendEmail({ to, subject, html, text }: EmailOptions) {
   if (!emailEnabled || !transporter) {
-    console.log('Email not configured. Email would be sent to:', to);
-    console.log('Subject:', subject);
-    console.log('Content:', text || html);
+    // eslint-disable-next-line no-console
+    console.log('\n⚠️  SMTP NOT CONFIGURED - Email not sent');
+    // eslint-disable-next-line no-console
+    console.log('   To:', to);
+    // eslint-disable-next-line no-console
+    console.log('   Subject:', subject);
+    // eslint-disable-next-line no-console
+    console.log('   Configure SMTP in .env to send emails\n');
     return { success: false, message: 'Email service not configured' };
   }
 
@@ -38,15 +43,20 @@ export async function sendEmail({ to, subject, html, text }: EmailOptions) {
       text,
     });
 
+    // eslint-disable-next-line no-console
+    console.log('✅ Email sent successfully to:', to);
     return { success: true };
   } catch (error) {
-    console.error('Error sending email:', error);
-    return { success: false, message: error.message };
+    // eslint-disable-next-line no-console
+    console.error('❌ Error sending email:', error);
+    return { success: false, message: error instanceof Error ? error.message : 'Unknown error' };
   }
 }
 
 export function generateVerificationEmail(username: string, token: string) {
-  const verificationUrl = `${process.env.APP_URL || 'http://localhost:3000'}/verify-email?token=${token}`;
+  const verificationUrl = `${
+    process.env.APP_URL || 'http://localhost:3000'
+  }/verify-email?token=${token}`;
 
   const html = `
     <!DOCTYPE html>

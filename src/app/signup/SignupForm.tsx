@@ -6,32 +6,36 @@ import {
   TextField,
   PasswordField,
   SubmitButton,
-  Button,
   Icon,
 } from 'react-basics';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useApi, useMessages } from '@/components/hooks';
-import { setUser } from '@/store/app';
-import { setClientAuthToken } from '@/lib/client';
 import Logo from '@/assets/logo.svg';
 import styles from './SignupForm.module.css';
 import Link from 'next/link';
 
 export function SignupForm() {
   const { formatMessage, labels, getMessage } = useMessages();
-  const router = useRouter();
   const { post, useMutation } = useApi();
   const [showEmailSent, setShowEmailSent] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [isResending, setIsResending] = useState(false);
 
   const { mutate, error, isPending } = useMutation({
     mutationFn: (data: any) => post('/users', data),
   });
 
+  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+    setToastMessage(message);
+    setToastType(type);
+    setTimeout(() => setToastMessage(''), 4000);
+  };
+
   const handleSubmit = async (data: any) => {
     const { username, password, email } = data;
-    
+
     // Create the user with default role and email
     mutate(
       { username, password, email, role: 'user' },
@@ -40,7 +44,7 @@ export function SignupForm() {
           setUserEmail(email);
           setShowEmailSent(true);
         },
-      }
+      },
     );
   };
 
@@ -51,20 +55,35 @@ export function SignupForm() {
           <Logo />
         </Icon>
         <div className={styles.title}>Check Your Email! 📧</div>
+        {toastMessage && (
+          <div className={`${styles.toast} ${styles[toastType]}`}>{toastMessage}</div>
+        )}
         <div className={styles.emailSentMessage}>
-          <p>We've sent a verification email to:</p>
+          <p>We&apos;ve sent a verification email to:</p>
           <p className={styles.email}>{userEmail}</p>
           <p>Please check your inbox and click the verification link to activate your account.</p>
           <p className={styles.hint}>
-            Didn't receive the email? Check your spam folder or{' '}
+            Didn&apos;t receive the email? Check your spam folder or{' '}
             <button
               className={styles.resendLink}
+              disabled={isResending}
               onClick={async () => {
-                await post('/auth/resend-verification', { email: userEmail });
-                alert('Verification email resent!');
+                setIsResending(true);
+                try {
+                  const response = await post('/auth/resend-verification', { email: userEmail });
+                  if (response.success) {
+                    showToast('✅ Verification email sent successfully!', 'success');
+                  } else {
+                    showToast('❌ Failed to send email. Please try again.', 'error');
+                  }
+                } catch (error) {
+                  showToast('❌ Failed to send email. Please try again.', 'error');
+                } finally {
+                  setIsResending(false);
+                }
               }}
             >
-              resend verification email
+              {isResending ? 'Sending...' : 'resend verification email'}
             </button>
           </p>
         </div>
@@ -86,22 +105,19 @@ export function SignupForm() {
       <div className={styles.subtitle}>Create your free analytics account</div>
       <Form className={styles.form} onSubmit={handleSubmit} error={getMessage(error)}>
         <FormRow label={formatMessage(labels.username)}>
-          <FormInput
-            name="username"
-            rules={{ required: formatMessage(labels.required) }}
-          >
+          <FormInput name="username" rules={{ required: formatMessage(labels.required) }}>
             <TextField autoComplete="off" />
           </FormInput>
         </FormRow>
         <FormRow label={formatMessage(labels.email) || 'Email'}>
           <FormInput
             name="email"
-            rules={{ 
+            rules={{
               required: formatMessage(labels.required),
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: 'Invalid email address'
-              }
+                message: 'Invalid email address',
+              },
             }}
           >
             <TextField type="email" autoComplete="email" />
@@ -110,9 +126,9 @@ export function SignupForm() {
         <FormRow label={formatMessage(labels.password)}>
           <FormInput
             name="password"
-            rules={{ 
+            rules={{
               required: formatMessage(labels.required),
-              minLength: { value: 8, message: 'Password must be at least 8 characters' }
+              minLength: { value: 8, message: 'Password must be at least 8 characters' },
             }}
           >
             <PasswordField />
@@ -121,20 +137,16 @@ export function SignupForm() {
         <FormRow label="Confirm Password">
           <FormInput
             name="confirmPassword"
-            rules={{ 
+            rules={{
               required: formatMessage(labels.required),
-              validate: (value, values) => value === values.password || 'Passwords do not match'
+              validate: (value, values) => value === values.password || 'Passwords do not match',
             }}
           >
             <PasswordField />
           </FormInput>
         </FormRow>
         <FormButtons>
-          <SubmitButton
-            className={styles.button}
-            variant="primary"
-            disabled={isPending}
-          >
+          <SubmitButton className={styles.button} variant="primary" disabled={isPending}>
             {formatMessage(labels.signup) || 'Sign Up'}
           </SubmitButton>
         </FormButtons>
