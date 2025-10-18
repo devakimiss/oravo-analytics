@@ -301,20 +301,20 @@
   }
 
   .actionCard {
-    padding: 24px 20px;
+    padding: 18px 16px;
   }
 
   .actionIcon {
-    font-size: 48px;
-    margin-bottom: 14px;
+    font-size: 36px;
+    margin-bottom: 10px;
   }
 
   .actionTitle {
-    font-size: 17px;
+    font-size: 15px;
   }
 
   .actionDescription {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .statValue {
@@ -344,10 +344,19 @@
   }
 
   .actionCard {
-    padding: 28px 20px;
+    padding: 16px;
   }
 
   .actionIcon {
-    font-size: 44px;
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  .actionTitle {
+    font-size: 14px;
+  }
+
+  .actionDescription {
+    font-size: 12px;
   }
 }

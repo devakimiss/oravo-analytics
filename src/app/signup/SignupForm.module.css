@@ -266,11 +266,40 @@
 /* Responsive */
 @media only screen and (max-width: 768px) {
   .successCard {
-    padding: 40px 32px;
+    padding: 48px 36px;
+    margin: 0 16px;
   }
 
   .successIcon {
-    font-size: 64px;
+    font-size: 80px;
+  }
+
+  .successTitle {
+    font-size: 32px;
+  }
+
+  .successMessage {
+    font-size: 18px;
+  }
+
+  .successSubtitle {
+    font-size: 17px;
+  }
+
+  .successButton {
+    padding: 18px 36px;
+    font-size: 18px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .successCard {
+    padding: 40px 28px;
+    margin: 0 12px;
+  }
+
+  .successIcon {
+    font-size: 72px;
   }
 
   .successTitle {
@@ -278,28 +307,15 @@
   }
 
   .successMessage {
-    font-size: 16px;
-  }
-}
-
-@media only screen and (max-width: 480px) {
-  .successCard {
-    padding: 32px 24px;
-  }
-
-  .successIcon {
-    font-size: 56px;
-  }
-
-  .successTitle {
-    font-size: 24px;
-  }
-
-  .successMessage {
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .successSubtitle {
-    font-size: 14px;
+    font-size: 16px;
+  }
+
+  .successButton {
+    padding: 16px 32px;
+    font-size: 17px;
   }
 }
