@@ -20,8 +20,8 @@ export async function POST(request: Request) {
       .optional(),
   });
 
-  // Try to get authentication, but don't require it
-  const { auth, body: parsedBody, error } = await parseRequest(request, schema);
+  // Try to get authentication, but don't require it (skipAuth: true)
+  const { auth, body: parsedBody, error } = await parseRequest(request, schema, { skipAuth: true });
 
   if (error) {
     return error();
