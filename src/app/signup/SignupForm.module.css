@@ -173,3 +173,133 @@
     padding: 15px;
   }
 }
+
+/* Success Screen */
+.successScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.successCard {
+  background: white;
+  border-radius: 20px;
+  padding: 48px 40px;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.successIcon {
+  font-size: 72px;
+  margin-bottom: 24px;
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.successTitle {
+  font-size: 32px;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+
+.successMessage {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.successMessage strong {
+  color: #000000;
+  font-weight: 700;
+}
+
+.successSubtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.successActions {
+  margin-bottom: 16px;
+}
+
+.successButton {
+  width: 100%;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 8px;
+}
+
+.successHint {
+  font-size: 14px;
+  color: #999;
+  margin: 0;
+}
+
+/* Responsive */
+@media only screen and (max-width: 768px) {
+  .successCard {
+    padding: 40px 32px;
+  }
+
+  .successIcon {
+    font-size: 64px;
+  }
+
+  .successTitle {
+    font-size: 28px;
+  }
+
+  .successMessage {
+    font-size: 16px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .successCard {
+    padding: 32px 24px;
+  }
+
+  .successIcon {
+    font-size: 56px;
+  }
+
+  .successTitle {
+    font-size: 24px;
+  }
+
+  .successMessage {
+    font-size: 15px;
+  }
+
+  .successSubtitle {
+    font-size: 14px;
+  }
+}
