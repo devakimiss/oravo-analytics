@@ -60,34 +60,17 @@ export async function POST(request: Request) {
       }
     }
 
-    // Generate verification token if email provided
-    const verificationToken = email ? getRandomChars(32) : null;
-
+    // Email verification disabled - all users are verified immediately
     const newUser = await createUser({
       id: id || uuid(),
       username,
       password: hashPassword(password),
       email: email || null,
-      emailVerified: email ? false : true,
-      verificationToken,
+      emailVerified: true, // Always verified
+      verificationToken: null, // No verification needed
       onboardingCompleted: false,
       role: role ?? ROLES.user,
     });
-
-    // Send verification email (don't wait for it to complete)
-    if (email && verificationToken) {
-      const { html, text } = generateVerificationEmail(username, verificationToken);
-      sendEmail({
-        to: email,
-        subject: 'Verify Your Oravo Email Address',
-        html,
-        text,
-      }).catch(err => {
-        // Log error but don't fail user creation
-        // eslint-disable-next-line no-console
-        console.error('Failed to send verification email:', err);
-      });
-    }
 
     // Return user data without password
     return json({
