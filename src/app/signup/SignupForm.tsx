@@ -9,92 +9,45 @@ import {
   Icon,
 } from 'react-basics';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useApi, useMessages } from '@/components/hooks';
+import { setClientAuthToken } from '@/lib/client';
 import Logo from '@/assets/logo.svg';
 import styles from './SignupForm.module.css';
 import Link from 'next/link';
 
 export function SignupForm() {
+  const router = useRouter();
   const { formatMessage, labels, getMessage } = useMessages();
   const { post, useMutation } = useApi();
-  const [showEmailSent, setShowEmailSent] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
-  const [toastMessage, setToastMessage] = useState('');
-  const [toastType, setToastType] = useState<'success' | 'error'>('success');
-  const [isResending, setIsResending] = useState(false);
 
   const { mutate, error, isPending } = useMutation({
     mutationFn: (data: any) => post('/users', data),
   });
 
-  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
-    setToastMessage(message);
-    setToastType(type);
-    setTimeout(() => setToastMessage(''), 4000);
-  };
-
   const handleSubmit = async (data: any) => {
     const { username, password, email } = data;
 
-    // Create the user with default role and email
+    // Create the user and auto-login
     mutate(
       { username, password, email, role: 'user' },
       {
         onSuccess: async () => {
-          setUserEmail(email);
-          setShowEmailSent(true);
+          // Auto-login after signup
+          try {
+            const loginRes = await post('/auth/login', { username, password });
+            if (loginRes?.token) {
+              setClientAuthToken(loginRes.token);
+              // Redirect to onboarding
+              router.push('/onboarding');
+            }
+          } catch (err) {
+            console.error('Auto-login failed:', err);
+          }
         },
       },
     );
   };
-
-  if (showEmailSent) {
-    return (
-      <div className={styles.signup}>
-        <Icon className={styles.icon} size="xl">
-          <Logo />
-        </Icon>
-        <div className={styles.title}>Check Your Email! 📧</div>
-        {toastMessage && (
-          <div className={`${styles.toast} ${styles[toastType]}`}>{toastMessage}</div>
-        )}
-        <div className={styles.emailSentMessage}>
-          <p>We&apos;ve sent a verification email to:</p>
-          <p className={styles.email}>{userEmail}</p>
-          <p>Please check your inbox and click the verification link to activate your account.</p>
-          <p className={styles.hint}>
-            Didn&apos;t receive the email? Check your spam folder or{' '}
-            <button
-              className={styles.resendLink}
-              disabled={isResending}
-              onClick={async () => {
-                setIsResending(true);
-                try {
-                  const response = await post('/auth/resend-verification', { email: userEmail });
-                  if (response.success) {
-                    showToast('✅ Verification email sent successfully!', 'success');
-                  } else {
-                    showToast('❌ Failed to send email. Please try again.', 'error');
-                  }
-                } catch (error) {
-                  showToast('❌ Failed to send email. Please try again.', 'error');
-                } finally {
-                  setIsResending(false);
-                }
-              }}
-            >
-              {isResending ? 'Sending...' : 'resend verification email'}
-            </button>
-          </p>
-        </div>
-        <div className={styles.footer}>
-          <Link href="/login" className={styles.link}>
-            Back to login
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.signup}>
