@@ -144,10 +144,12 @@
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .actionCard:hover {
-  border-color: #000000;
+  background: var(--base100);
+  border-color: var(--primary500);
   border-style: solid;
   transform: translateY(-2px);
 }
@@ -155,12 +157,13 @@
 .actionIcon {
   font-size: 32px;
   margin-bottom: 12px;
+  filter: grayscale(0%);
 }
 
 .actionTitle {
   font-weight: 600;
   margin-bottom: 4px;
-  color: #000000;
+  color: var(--font-color);
 }
 
 .actionDescription {
@@ -254,15 +257,19 @@
 /* Responsive */
 @media only screen and (max-width: 992px) {
   .welcomeSection {
-    padding: 36px 32px;
+    padding: 28px 32px;
   }
 
   .welcomeTitle {
-    font-size: 30px;
+    font-size: 24px;
   }
 
   .welcomeSubtitle {
-    font-size: 16px;
+    font-size: 14px;
+  }
+
+  .welcomeEmoji {
+    font-size: 38px;
   }
 
   .quickStats {
@@ -272,16 +279,31 @@
 
 @media only screen and (max-width: 768px) {
   .welcomeSection {
-    padding: 32px 24px;
-    border-radius: 16px;
+    padding: 24px;
+    border-radius: 14px;
+  }
+
+  .welcomeContent {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
   }
 
   .welcomeTitle {
-    font-size: 28px;
+    font-size: 22px;
   }
 
   .welcomeSubtitle {
-    font-size: 15px;
+    font-size: 14px;
+  }
+
+  .welcomeEmoji {
+    font-size: 36px;
+  }
+
+  .welcomeTime {
+    margin-top: 8px;
+    justify-content: center;
   }
 
   .quickStats,
@@ -300,14 +322,18 @@
 
 @media only screen and (max-width: 480px) {
   .welcomeSection {
-    padding: 28px 20px;
+    padding: 20px;
   }
 
   .welcomeTitle {
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .welcomeSubtitle {
-    font-size: 14px;
+    font-size: 13px;
+  }
+
+  .welcomeEmoji {
+    font-size: 32px;
   }
 }

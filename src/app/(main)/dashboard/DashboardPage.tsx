@@ -82,13 +82,13 @@ export function DashboardPage() {
                 {getGreeting()}, {user?.username || 'there'}!
               </div>
               <div className={styles.welcomeSubtitle}>
-                Track your website performance
+                Welcome to your Oravo analytics dashboard. Track your website performance in real-time.
               </div>
             </div>
-          </div>
-          <div className={styles.welcomeTime}>
-            <span className={styles.timeDisplay}>{formatTime(currentTime)}</span>
-            <span className={styles.dateDisplay}>{formatDate(currentTime)}</span>
+            <div className={styles.welcomeTime}>
+              <span className={styles.timeDisplay}>{formatTime(currentTime)}</span>
+              <span className={styles.dateDisplay}>{formatDate(currentTime)}</span>
+            </div>
           </div>
         </div>
       )}
