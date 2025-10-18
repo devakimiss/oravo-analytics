@@ -1,11 +1,10 @@
 import { z } from 'zod';
 import { hashPassword, canCreateUser } from '@/lib/auth';
 import { ROLES } from '@/lib/constants';
-import { uuid, getRandomChars } from '@/lib/crypto';
+import { uuid } from '@/lib/crypto';
 import { parseRequest } from '@/lib/request';
 import { unauthorized, json, badRequest } from '@/lib/response';
 import { createUser, getUserByUsername } from '@/queries';
-import { sendEmail, generateVerificationEmail } from '@/lib/email';
 import prisma from '@/lib/prisma';
 
 export async function POST(request: Request) {
