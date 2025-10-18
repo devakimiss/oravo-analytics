@@ -40,6 +40,19 @@ export function LoginForm() {
         <Logo />
       </Icon>
       <div className={styles.title}>Oravo</div>
+      {isNewUser && (
+        <div style={{ 
+          background: '#10b981', 
+          color: 'white', 
+          padding: '12px 16px', 
+          borderRadius: '8px', 
+          marginBottom: '16px',
+          textAlign: 'center',
+          fontWeight: 600
+        }}>
+          ✅ Account created! Please login to continue.
+        </div>
+      )}
       <Form className={styles.form} onSubmit={handleSubmit} error={getMessage(error)}>
         <FormRow label={formatMessage(labels.username)}>
           <FormInput

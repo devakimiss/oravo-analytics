@@ -27,59 +27,13 @@ export function SignupForm() {
   const handleSubmit = async (data: any) => {
     const { username, password, email } = data;
 
-    // eslint-disable-next-line no-console
-    console.log('🔵 Starting signup process for:', username);
-
-    // Create the user and auto-login
+    // Create the user account
     mutate(
       { username, password, email, role: 'user' },
       {
-        onSuccess: async (signupData) => {
-          // eslint-disable-next-line no-console
-          console.log('✅ Account created successfully:', signupData);
-          
-          // Account created! Now login and go to onboarding
-          try {
-            // eslint-disable-next-line no-console
-            console.log('🔵 Attempting auto-login...');
-            
-            const loginRes = await post('/auth/login', { username, password });
-            
-            // eslint-disable-next-line no-console
-            console.log('🔵 Login response:', loginRes ? 'Received' : 'Empty');
-            
-            if (loginRes?.token && loginRes?.user) {
-              // eslint-disable-next-line no-console
-              console.log('✅ Auto-login successful! Token received.');
-              
-              // Set auth
-              setClientAuthToken(loginRes.token);
-              
-              // Wait a moment for auth to be set
-              await new Promise(resolve => setTimeout(resolve, 200));
-              
-              // eslint-disable-next-line no-console
-              console.log('🔵 Redirecting to onboarding...');
-              
-              // Go directly to onboarding
-              router.push('/onboarding');
-            } else {
-              // eslint-disable-next-line no-console
-              console.error('❌ Auto-login failed: No token or user in response');
-              // If login fails, show message and redirect to login
-              alert('Account created! Please login to continue.');
-              router.push('/login');
-            }
-          } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error('❌ Auto-login error:', err);
-            alert('Account created! Please login to continue.');
-            router.push('/login');
-          }
-        },
-        onError: (err) => {
-          // eslint-disable-next-line no-console
-          console.error('❌ Signup failed:', err);
+        onSuccess: () => {
+          // Account created! Redirect to login
+          router.push('/login?signup=success');
         },
       },
     );
