@@ -53,14 +53,12 @@ DATABASE_URL=postgresql://username:mypassword@localhost:5432/mydb
 # App URL (Required)
 APP_URL=http://localhost:3000
 
-# Email Configuration (Optional - for email verification)
-# If not configured, verification emails will be logged to console
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=your-email@gmail.com
-SMTP_PASSWORD=your-app-password
-SMTP_FROM=noreply@oravo.com
+# SendGrid Email Configuration (Optional - for email verification)
+# Get your API key at: https://app.sendgrid.com/settings/api_keys
+# See SENDGRID_SETUP.md for detailed setup instructions
+# If not configured, verification URLs will be displayed in console
+SENDGRID_API_KEY=SG.your-sendgrid-api-key-here
+SENDGRID_FROM_EMAIL=noreply@yourdomain.com
 ```
 
 **Database URL formats:**
