@@ -256,22 +256,6 @@
 
 /* Responsive */
 @media only screen and (max-width: 992px) {
-  .welcomeSection {
-    padding: 28px 32px;
-  }
-
-  .welcomeTitle {
-    font-size: 24px;
-  }
-
-  .welcomeSubtitle {
-    font-size: 14px;
-  }
-
-  .welcomeEmoji {
-    font-size: 38px;
-  }
-
   .quickStats {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
@@ -279,31 +263,16 @@
 
 @media only screen and (max-width: 768px) {
   .welcomeSection {
-    padding: 24px;
-    border-radius: 14px;
+    padding: 18px 20px;
   }
 
   .welcomeContent {
-    flex-direction: column;
-    text-align: center;
-    gap: 16px;
-  }
-
-  .welcomeTitle {
-    font-size: 22px;
-  }
-
-  .welcomeSubtitle {
-    font-size: 14px;
-  }
-
-  .welcomeEmoji {
-    font-size: 36px;
+    flex-wrap: wrap;
   }
 
   .welcomeTime {
     margin-top: 8px;
-    justify-content: center;
+    width: 100%;
   }
 
   .quickStats,
@@ -322,18 +291,18 @@
 
 @media only screen and (max-width: 480px) {
   .welcomeSection {
-    padding: 20px;
-  }
-
-  .welcomeTitle {
-    font-size: 20px;
-  }
-
-  .welcomeSubtitle {
-    font-size: 13px;
+    padding: 16px;
   }
 
   .welcomeEmoji {
-    font-size: 32px;
+    font-size: 24px;
+  }
+
+  .welcomeTitle {
+    font-size: 16px;
+  }
+
+  .welcomeSubtitle {
+    font-size: 12px;
   }
 }
