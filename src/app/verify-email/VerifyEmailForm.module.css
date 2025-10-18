@@ -20,13 +20,10 @@
 }
 
 .title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   margin: 20px 0;
-  background: linear-gradient(135deg, #000000 0%, #2a2a2a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #000000;
 }
 
 .message {

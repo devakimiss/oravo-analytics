@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Icon, Button } from 'react-basics';
 import { useApi } from '@/components/hooks';
@@ -6,7 +6,7 @@ import Logo from '@/assets/logo.svg';
 import styles from './VerifyEmailForm.module.css';
 import Link from 'next/link';
 
-export function VerifyEmailForm() {
+function VerifyEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -24,11 +24,11 @@ export function VerifyEmailForm() {
     const verifyEmail = async () => {
       try {
         const response = await post('/auth/verify-email', { token });
-        
+
         if (response?.success) {
           setStatus('success');
           setMessage('Your email has been verified successfully!');
-          
+
           // Redirect to login after 3 seconds
           setTimeout(() => {
             router.push('/login');
@@ -51,7 +51,7 @@ export function VerifyEmailForm() {
       <Icon className={styles.icon} size="xl">
         <Logo />
       </Icon>
-      
+
       {status === 'verifying' && (
         <>
           <div className={styles.title}>Verifying Email...</div>
@@ -90,14 +90,30 @@ export function VerifyEmailForm() {
               </Button>
             </Link>
             <Link href="/login">
-              <Button variant="quiet">
-                Back to Login
-              </Button>
+              <Button variant="quiet">Back to Login</Button>
             </Link>
           </div>
         </>
       )}
     </div>
+  );
+}
+
+export function VerifyEmailForm() {
+  return (
+    <Suspense
+      fallback={
+        <div className={styles.verify}>
+          <Icon className={styles.icon} size="xl">
+            <Logo />
+          </Icon>
+          <div className={styles.title}>Loading...</div>
+          <div className={styles.spinner}></div>
+        </div>
+      }
+    >
+      <VerifyEmailContent />
+    </Suspense>
   );
 }
 
