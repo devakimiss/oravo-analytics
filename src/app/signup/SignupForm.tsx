@@ -7,11 +7,10 @@ import {
   PasswordField,
   SubmitButton,
   Icon,
-  Button,
 } from 'react-basics';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApi, useMessages } from '@/components/hooks';
+import { setClientAuthToken } from '@/lib/client';
 import Logo from '@/assets/logo.svg';
 import styles from './SignupForm.module.css';
 import Link from 'next/link';
@@ -20,8 +19,6 @@ export function SignupForm() {
   const router = useRouter();
   const { formatMessage, labels, getMessage } = useMessages();
   const { post, useMutation } = useApi();
-  const [success, setSuccess] = useState(false);
-  const [newUsername, setNewUsername] = useState('');
 
   const { mutate, error, isPending } = useMutation({
     mutationFn: (data: any) => post('/users', data),
@@ -30,49 +27,35 @@ export function SignupForm() {
   const handleSubmit = async (data: any) => {
     const { username, password, email } = data;
 
-    // Create the user
+    // Create the user and auto-login
     mutate(
       { username, password, email, role: 'user' },
       {
-        onSuccess: () => {
-          // Account created successfully! Show welcome card
-          setNewUsername(username);
-          setSuccess(true);
+        onSuccess: async () => {
+          // Account created! Now login and go to onboarding
+          try {
+            const loginRes = await post('/auth/login', { username, password });
+            if (loginRes?.token && loginRes?.user) {
+              // Set auth
+              setClientAuthToken(loginRes.token);
+              // Wait a moment for auth to be set
+              await new Promise(resolve => setTimeout(resolve, 200));
+              // Go directly to onboarding
+              router.push('/onboarding');
+            } else {
+              // If login fails, show message and redirect to login
+              alert('Account created! Please login to continue.');
+              router.push('/login');
+            }
+          } catch (err) {
+            console.error('Auto-login error:', err);
+            alert('Account created! Please login to continue.');
+            router.push('/login');
+          }
         },
       },
     );
   };
-
-  // Show success card after signup
-  if (success) {
-    return (
-      <div className={styles.successScreen}>
-        <div className={styles.successCard}>
-          <div className={styles.successIcon}>🎉</div>
-          <h1 className={styles.successTitle}>Welcome to Oravo!</h1>
-          <p className={styles.successMessage}>
-            Your account <strong>{newUsername}</strong> has been created successfully!
-          </p>
-          <p className={styles.successSubtitle}>
-            You're all set to start tracking your website analytics.
-          </p>
-          <div className={styles.successActions}>
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={() => router.push('/login')}
-              className={styles.successButton}
-            >
-              Get Started
-            </Button>
-          </div>
-          <p className={styles.successHint}>
-            Click above to login and start your journey with Oravo!
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.signup}>
