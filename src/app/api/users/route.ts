@@ -69,7 +69,7 @@ export async function POST(request: Request) {
     // Generate verification token if email provided
     const verificationToken = email ? getRandomChars(32) : null;
 
-    const user = await createUser({
+    const newUser = await createUser({
       id: id || uuid(),
       username,
       password: hashPassword(password),
@@ -80,19 +80,32 @@ export async function POST(request: Request) {
       role: role ?? ROLES.user,
     });
 
-    // Send verification email
+    // Send verification email (don't wait for it to complete)
     if (email && verificationToken) {
       const { html, text } = generateVerificationEmail(username, verificationToken);
-      await sendEmail({
+      sendEmail({
         to: email,
         subject: 'Verify Your Oravo Email Address',
         html,
         text,
+      }).catch(err => {
+        // Log error but don't fail user creation
+        // eslint-disable-next-line no-console
+        console.error('Failed to send verification email:', err);
       });
     }
 
-    return json(user);
+    // Return user data without password
+    return json({
+      id: newUser.id,
+      username: newUser.username,
+      email: newUser.email,
+      emailVerified: newUser.emailVerified,
+      role: newUser.role,
+      createdAt: newUser.createdAt,
+    });
   } catch (error) {
-    return badRequest(error instanceof Error ? error.message : 'Failed to create user');
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create user';
+    return json({ error: errorMessage }, { status: 400 });
   }
 }
