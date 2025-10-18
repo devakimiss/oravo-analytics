@@ -7,11 +7,11 @@ import {
   PasswordField,
   SubmitButton,
   Icon,
+  Button,
 } from 'react-basics';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApi, useMessages } from '@/components/hooks';
-import { setClientAuthToken } from '@/lib/client';
 import Logo from '@/assets/logo.svg';
 import styles from './SignupForm.module.css';
 import Link from 'next/link';
@@ -20,6 +20,8 @@ export function SignupForm() {
   const router = useRouter();
   const { formatMessage, labels, getMessage } = useMessages();
   const { post, useMutation } = useApi();
+  const [success, setSuccess] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
 
   const { mutate, error, isPending } = useMutation({
     mutationFn: (data: any) => post('/users', data),
@@ -33,12 +35,44 @@ export function SignupForm() {
       { username, password, email, role: 'user' },
       {
         onSuccess: () => {
-          // Account created successfully! Redirect to login
-          router.push('/login');
+          // Account created successfully! Show welcome card
+          setNewUsername(username);
+          setSuccess(true);
         },
       },
     );
   };
+
+  // Show success card after signup
+  if (success) {
+    return (
+      <div className={styles.successScreen}>
+        <div className={styles.successCard}>
+          <div className={styles.successIcon}>🎉</div>
+          <h1 className={styles.successTitle}>Welcome to Oravo!</h1>
+          <p className={styles.successMessage}>
+            Your account <strong>{newUsername}</strong> has been created successfully!
+          </p>
+          <p className={styles.successSubtitle}>
+            You're all set to start tracking your website analytics.
+          </p>
+          <div className={styles.successActions}>
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={() => router.push('/login')}
+              className={styles.successButton}
+            >
+              Get Started
+            </Button>
+          </div>
+          <p className={styles.successHint}>
+            Click above to login and start your journey with Oravo!
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.signup}>
