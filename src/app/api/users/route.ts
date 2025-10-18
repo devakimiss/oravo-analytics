@@ -93,8 +93,6 @@ export async function POST(request: Request) {
 
     return json(user);
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error creating user:', error);
-    return badRequest('Failed to create user');
+    return badRequest(error instanceof Error ? error.message : 'Failed to create user');
   }
 }
