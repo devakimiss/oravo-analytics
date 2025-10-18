@@ -37,9 +37,31 @@
 
   .actions {
     flex-direction: column;
+    gap: 15px;
   }
 
   .search {
     max-width: 100%;
+    width: 100%;
+  }
+
+  .buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .actions {
+    gap: 10px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .buttons > * {
+    width: 100%;
   }
 }

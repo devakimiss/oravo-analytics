@@ -117,20 +117,6 @@ export async function deleteTeam(
   teamId: string,
 ): Promise<Promise<[Prisma.BatchPayload, Prisma.BatchPayload, Team]>> {
   const { client, transaction } = prisma;
-  const cloudMode = process.env.CLOUD_MODE;
-
-  if (cloudMode) {
-    return transaction([
-      client.team.update({
-        data: {
-          deletedAt: new Date(),
-        },
-        where: {
-          id: teamId,
-        },
-      }),
-    ]);
-  }
 
   return transaction([
     client.teamUser.deleteMany({

@@ -39,7 +39,7 @@ export function LoginForm() {
       <Icon className={styles.icon} size="xl">
         <Logo />
       </Icon>
-      <div className={styles.title}>umami</div>
+      <div className={styles.title}>Oravo</div>
       <Form className={styles.form} onSubmit={handleSubmit} error={getMessage(error)}>
         <FormRow label={formatMessage(labels.username)}>
           <FormInput
@@ -70,6 +70,12 @@ export function LoginForm() {
           </SubmitButton>
         </FormButtons>
       </Form>
+      <div className={styles.footer}>
+        Don't have an account?{' '}
+        <a href="/signup" className={styles.link}>
+          Sign up
+        </a>
+      </div>
     </div>
   );
 }

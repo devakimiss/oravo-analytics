@@ -1,10 +1,10 @@
 import { Metadata } from 'next';
-import LoginPage from './LoginPage';
+import SignupPage from './SignupPage';
 
 export default async function () {
-  return <LoginPage />;
+  return <SignupPage />;
 }
 
 export const metadata: Metadata = {
-  title: 'Login',
+  title: 'Sign Up',
 };

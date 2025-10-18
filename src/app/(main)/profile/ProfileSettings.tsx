@@ -10,7 +10,6 @@ import { ROLES } from '@/lib/constants';
 export function ProfileSettings() {
   const { user } = useLogin();
   const { formatMessage, labels } = useMessages();
-  const cloudMode = !!process.env.cloudMode;
 
   if (!user) {
     return null;
@@ -36,11 +35,9 @@ export function ProfileSettings() {
     <Form>
       <FormRow label={formatMessage(labels.username)}>{username}</FormRow>
       <FormRow label={formatMessage(labels.role)}>{renderRole(role)}</FormRow>
-      {!cloudMode && (
-        <FormRow label={formatMessage(labels.password)}>
-          <PasswordChangeButton />
-        </FormRow>
-      )}
+      <FormRow label={formatMessage(labels.password)}>
+        <PasswordChangeButton />
+      </FormRow>
       <FormRow label={formatMessage(labels.defaultDateRange)}>
         <DateRangeSetting />
       </FormRow>

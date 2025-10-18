@@ -9,14 +9,6 @@ import '@/styles/index.css';
 import '@/styles/variables.css';
 
 export default function ({ children }) {
-  if (process.env.DISABLE_UI) {
-    return (
-      <html>
-        <body></body>
-      </html>
-    );
-  }
-
   return (
     <html lang="en" data-scroll="0">
       <head>
@@ -40,7 +32,7 @@ export default function ({ children }) {
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Umami',
-    default: 'Umami',
+    template: '%s | Oravo',
+    default: 'Oravo',
   },
 };

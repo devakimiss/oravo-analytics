@@ -8,6 +8,7 @@
   flex-direction: column;
   position: relative;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .body td {
@@ -31,4 +32,29 @@
   align-items: center;
   justify-content: center;
   min-height: 200px;
+}
+
+@media only screen and (max-width: 768px) {
+  .search {
+    max-width: 100%;
+    width: 100%;
+    margin: 15px 0;
+  }
+
+  .body td {
+    min-height: 60px;
+    font-size: 13px;
+  }
+
+  .pager {
+    margin: 15px 0;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .body td {
+    min-height: 50px;
+    gap: 8px;
+    font-size: 12px;
+  }
 }

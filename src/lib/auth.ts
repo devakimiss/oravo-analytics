@@ -9,8 +9,7 @@ import { ensureArray } from '@/lib/utils';
 import { getTeamUser, getUser, getWebsite } from '@/queries';
 import { Auth } from './types';
 
-const log = debug('umami:auth');
-const cloudMode = process.env.CLOUD_MODE;
+const log = debug('oravo:auth');
 const SALT_ROUNDS = 10;
 
 export function hashPassword(password: string, rounds = SALT_ROUNDS) {
@@ -113,10 +112,6 @@ export async function canViewAllWebsites({ user }: Auth) {
 }
 
 export async function canCreateWebsite({ user, grant }: Auth) {
-  if (cloudMode) {
-    return !!grant?.find(a => a === PERMISSIONS.websiteCreate);
-  }
-
   if (user.isAdmin) {
     return true;
   }
@@ -213,10 +208,6 @@ export async function canDeleteReport(auth: Auth, report: Report) {
 }
 
 export async function canCreateTeam({ user, grant }: Auth) {
-  if (cloudMode) {
-    return !!grant?.find(a => a === PERMISSIONS.teamCreate);
-  }
-
   if (user.isAdmin) {
     return true;
   }
@@ -237,20 +228,12 @@ export async function canUpdateTeam({ user, grant }: Auth, teamId: string) {
     return true;
   }
 
-  if (cloudMode) {
-    return !!grant?.find(a => a === PERMISSIONS.teamUpdate);
-  }
-
   const teamUser = await getTeamUser(teamId, user.id);
 
   return teamUser && hasPermission(teamUser.role, PERMISSIONS.teamUpdate);
 }
 
 export async function canAddUserToTeam({ user, grant }: Auth) {
-  if (cloudMode) {
-    return !!grant?.find(a => a === PERMISSIONS.teamUpdate);
-  }
-
   return user.isAdmin;
 }
 

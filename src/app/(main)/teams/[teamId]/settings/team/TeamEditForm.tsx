@@ -27,7 +27,6 @@ export function TeamEditForm({ teamId, allowEdit }: { teamId: string; allowEdit?
   const [accessCode, setAccessCode] = useState(team.accessCode);
   const { showToast } = useToasts();
   const { touch } = useModified();
-  const cloudMode = !!process.env.cloudMode;
 
   const handleSubmit = async (data: any) => {
     mutate(data, {
@@ -61,7 +60,7 @@ export function TeamEditForm({ teamId, allowEdit }: { teamId: string; allowEdit?
         )}
         {!allowEdit && team.name}
       </FormRow>
-      {!cloudMode && allowEdit && (
+      {allowEdit && (
         <FormRow label={formatMessage(labels.accessCode)}>
           <Flexbox gap={10}>
             <TextField value={accessCode} readOnly allowCopy />
