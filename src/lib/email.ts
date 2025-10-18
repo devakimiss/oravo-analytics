@@ -16,6 +16,8 @@ export interface EmailOptions {
 }
 
 export async function sendEmail({ to, subject, html, text }: EmailOptions) {
+  const fromEmail = process.env.SENDGRID_FROM_EMAIL;
+
   if (!emailEnabled) {
     // eslint-disable-next-line no-console
     console.log('\n⚠️  SENDGRID NOT CONFIGURED - Email not sent');
@@ -24,16 +26,39 @@ export async function sendEmail({ to, subject, html, text }: EmailOptions) {
     // eslint-disable-next-line no-console
     console.log('   Subject:', subject);
     // eslint-disable-next-line no-console
-    console.log('   Set SENDGRID_API_KEY in .env to send emails');
+    console.log('   📝 Set these environment variables in Vercel:');
+    // eslint-disable-next-line no-console
+    console.log('   SENDGRID_API_KEY=SG.your-key-here');
+    // eslint-disable-next-line no-console
+    console.log('   SENDGRID_FROM_EMAIL=your-verified-email@domain.com');
+    // eslint-disable-next-line no-console
+    console.log('   APP_URL=https://your-app.vercel.app');
     // eslint-disable-next-line no-console
     console.log('   Get your API key at: https://app.sendgrid.com/settings/api_keys\n');
     return { success: false, message: 'Email service not configured' };
   }
 
+  if (!fromEmail) {
+    // eslint-disable-next-line no-console
+    console.error('❌ SENDGRID_FROM_EMAIL not set!');
+    // eslint-disable-next-line no-console
+    console.log('   Add SENDGRID_FROM_EMAIL to Vercel environment variables');
+    return { success: false, message: 'Sender email not configured' };
+  }
+
   try {
+    // eslint-disable-next-line no-console
+    console.log('📧 Sending email via SendGrid...');
+    // eslint-disable-next-line no-console
+    console.log('   From:', fromEmail);
+    // eslint-disable-next-line no-console
+    console.log('   To:', to);
+    // eslint-disable-next-line no-console
+    console.log('   Subject:', subject);
+
     await sgMail.send({
       to,
-      from: process.env.SENDGRID_FROM_EMAIL || 'noreply@oravo.com',
+      from: fromEmail,
       subject,
       html,
       text: text || subject,
@@ -44,10 +69,22 @@ export async function sendEmail({ to, subject, html, text }: EmailOptions) {
     return { success: true };
   } catch (error: any) {
     // eslint-disable-next-line no-console
-    console.error('❌ SendGrid Error:', error.response?.body || error.message);
+    console.error('❌ SendGrid Error:', JSON.stringify(error.response?.body || error.message, null, 2));
+    
+    const errorMsg = error.response?.body?.errors?.[0]?.message || error.message;
+    
+    // eslint-disable-next-line no-console
+    console.error('💡 Common fixes:');
+    // eslint-disable-next-line no-console
+    console.error('   1. Verify sender email in SendGrid: https://app.sendgrid.com/settings/sender_auth');
+    // eslint-disable-next-line no-console
+    console.error('   2. Check API key has "Mail Send" permissions');
+    // eslint-disable-next-line no-console
+    console.error('   3. Ensure environment variables are set in Vercel');
+    
     return {
       success: false,
-      message: error.response?.body?.errors?.[0]?.message || error.message || 'Unknown error',
+      message: errorMsg || 'Failed to send email',
     };
   }
 }
