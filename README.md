@@ -47,10 +47,23 @@ pnpm install
 Create an `.env` file with the following:
 
 ```bash
-DATABASE_URL=connection-url
+# Database (Required)
+DATABASE_URL=postgresql://username:mypassword@localhost:5432/mydb
+
+# App URL (Required)
+APP_URL=http://localhost:3000
+
+# Email Configuration (Optional - for email verification)
+# If not configured, verification emails will be logged to console
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+SMTP_FROM=noreply@oravo.com
 ```
 
-The connection URL format:
+**Database URL formats:**
 
 ```bash
 postgresql://username:mypassword@localhost:5432/mydb
@@ -64,6 +77,18 @@ pnpm run build
 ```
 
 _The build step will create tables in your database if you are installing for the first time. It will also create a login user with username **admin** and password **oravo**._
+
+### Run Database Migrations
+
+After the build, run the email verification migration:
+
+```bash
+# For PostgreSQL
+psql -d your_database < db/postgresql/migrations/01_add_email_verification.sql
+
+# Or run migrations through Prisma
+pnpm prisma migrate deploy
+```
 
 ### Start the Application
 

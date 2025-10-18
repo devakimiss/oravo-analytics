@@ -77,6 +77,10 @@ export async function createUser(data: {
   id: string;
   username: string;
   password: string;
+  email?: string | null;
+  emailVerified?: boolean;
+  verificationToken?: string | null;
+  onboardingCompleted?: boolean;
   role: Role;
 }): Promise<{
   id: string;

@@ -9,21 +9,27 @@ datasource db {
 }
 
 model User {
-  id          String    @id @unique @map("user_id") @db.Uuid
-  username    String    @unique @db.VarChar(255)
-  password    String    @db.VarChar(60)
-  role        String    @map("role") @db.VarChar(50)
-  logoUrl     String?   @map("logo_url") @db.VarChar(2183)
-  displayName String?   @map("display_name") @db.VarChar(255)
-  createdAt   DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+  id              String    @id @unique @map("user_id") @db.Uuid
+  username        String    @unique @db.VarChar(255)
+  password        String    @db.VarChar(60)
+  email           String?   @unique @db.VarChar(255)
+  emailVerified   Boolean   @default(false) @map("email_verified")
+  verificationToken String? @map("verification_token") @db.VarChar(255)
+  onboardingCompleted Boolean @default(false) @map("onboarding_completed")
+  role            String    @map("role") @db.VarChar(50)
+  logoUrl         String?   @map("logo_url") @db.VarChar(2183)
+  displayName     String?   @map("display_name") @db.VarChar(255)
+  createdAt       DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   websiteUser       Website[]  @relation("user")
   websiteCreateUser Website[]  @relation("createUser")
   teamUser          TeamUser[]
   report            Report[]
 
+  @@index([email])
+  @@index([verificationToken])
   @@map("user")
 }
 

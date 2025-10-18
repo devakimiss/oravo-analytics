@@ -1,0 +1,161 @@
+.onboarding {
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  padding: 50px;
+  background: var(--base50);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.icon svg {
+  width: 50px;
+  height: 50px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin: 20px 0 30px;
+  background: linear-gradient(135deg, #000000 0%, #2a2a2a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.progress {
+  margin: 30px 0;
+}
+
+.progressBar {
+  height: 8px;
+  background: var(--base300);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #000000, #2a2a2a);
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  text-align: center;
+  font-size: 13px;
+  color: var(--font-color200);
+}
+
+.step {
+  margin: 30px 0;
+}
+
+.step h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--font-color200);
+  margin-bottom: 30px;
+}
+
+.form {
+  margin: 30px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.button {
+  background: #000000 !important;
+  color: white !important;
+  padding: 12px 32px !important;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background: #2a2a2a !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.feature {
+  background: var(--base100);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.feature:hover {
+  transform: translateY(-5px);
+}
+
+.featureIcon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.feature h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+.feature p {
+  font-size: 13px;
+  color: var(--font-color200);
+  margin: 0;
+}
+
+@media only screen and (max-width: 768px) {
+  .onboarding {
+    padding: 30px 20px;
+    max-width: 100%;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .step h2 {
+    font-size: 20px;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}
