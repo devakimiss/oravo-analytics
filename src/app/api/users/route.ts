@@ -71,7 +71,18 @@ export async function POST(request: Request) {
       role: role ?? ROLES.user,
     });
 
-    // Return user data without password
+    // For public signup, return success with username (frontend will redirect to login)
+    // For admin creating user, return full user data
+    if (!auth?.user) {
+      // Public signup - redirect to login
+      return json({
+        success: true,
+        message: 'Account created successfully',
+        username: newUser.username,
+      });
+    }
+
+    // Admin creating user - return user data
     return json({
       id: newUser.id,
       username: newUser.username,

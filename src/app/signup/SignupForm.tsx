@@ -28,21 +28,30 @@ export function SignupForm() {
   const handleSubmit = async (data: any) => {
     const { username, password, email } = data;
 
-    // Create the user and auto-login
+    // Create the user
     mutate(
       { username, password, email, role: 'user' },
       {
-        onSuccess: async () => {
-          // Auto-login after signup
+        onSuccess: async (signupData: any) => {
+          // Account created successfully!
+          // Now login with the credentials
           try {
             const loginRes = await post('/auth/login', { username, password });
-            if (loginRes?.token) {
+            if (loginRes?.token && loginRes?.user) {
+              // Set auth token
               setClientAuthToken(loginRes.token);
+              // Small delay to ensure token is set
+              await new Promise(resolve => setTimeout(resolve, 100));
               // Redirect to onboarding
               router.push('/onboarding');
+            } else {
+              // If auto-login fails, redirect to login page
+              router.push('/login?message=Account created! Please login.');
             }
           } catch (err) {
             console.error('Auto-login failed:', err);
+            // Redirect to login page on error
+            router.push('/login?message=Account created! Please login.');
           }
         },
       },
