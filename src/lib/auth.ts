@@ -111,7 +111,7 @@ export async function canViewAllWebsites({ user }: Auth) {
   return user.isAdmin;
 }
 
-export async function canCreateWebsite({ user, grant }: Auth) {
+export async function canCreateWebsite({ user }: Auth) {
   if (user.isAdmin) {
     return true;
   }
@@ -207,7 +207,7 @@ export async function canDeleteReport(auth: Auth, report: Report) {
   return canUpdateReport(auth, report);
 }
 
-export async function canCreateTeam({ user, grant }: Auth) {
+export async function canCreateTeam({ user }: Auth) {
   if (user.isAdmin) {
     return true;
   }
@@ -223,7 +223,7 @@ export async function canViewTeam({ user }: Auth, teamId: string) {
   return getTeamUser(teamId, user.id);
 }
 
-export async function canUpdateTeam({ user, grant }: Auth, teamId: string) {
+export async function canUpdateTeam({ user }: Auth, teamId: string) {
   if (user.isAdmin) {
     return true;
   }
@@ -233,7 +233,7 @@ export async function canUpdateTeam({ user, grant }: Auth, teamId: string) {
   return teamUser && hasPermission(teamUser.role, PERMISSIONS.teamUpdate);
 }
 
-export async function canAddUserToTeam({ user, grant }: Auth) {
+export async function canAddUserToTeam({ user }: Auth) {
   return user.isAdmin;
 }
 

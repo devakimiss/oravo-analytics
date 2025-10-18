@@ -20,31 +20,25 @@ export async function POST(request: Request) {
       .optional(),
   });
 
-  // Parse request body without requiring authentication
-  let body;
-  try {
-    body = await request.json();
-    const result = schema.safeParse(body);
-    if (!result.success) {
-      return badRequest('Invalid request data');
-    }
-    body = result.data;
-  } catch (e) {
-    return badRequest('Invalid request body');
+  // Try to get authentication, but don't require it
+  const { auth, body: parsedBody, error } = await parseRequest(request, schema);
+
+  if (error) {
+    return error();
   }
 
-  // Check if this is an authenticated request (admin creating user)
-  // or a public signup (no auth required)
-  const authHeader = request.headers.get('authorization');
-  const isAuthenticatedRequest = !!authHeader;
+  const body = parsedBody;
 
-  if (isAuthenticatedRequest) {
-    // For authenticated requests, verify permissions
-    const { auth } = await parseRequest(request, schema);
+  // Check if user has authentication
+  // For public signup: no auth required
+  // For admin creating user: check permissions
+  if (auth?.user) {
+    // This is an authenticated request (admin creating user)
     if (!(await canCreateUser(auth))) {
       return unauthorized();
     }
   }
+  // If no auth, allow public signup (no permission check needed)
 
   const { id, username, password, email, role } = body;
 
