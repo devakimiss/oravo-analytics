@@ -131,44 +131,53 @@
 
 .quickActions {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
   margin-bottom: 30px;
 }
 
 .actionCard {
   background: var(--base50);
-  border: 2px dashed var(--base300);
+  border: 2px dashed var(--base400);
   border-radius: 12px;
-  padding: 24px;
+  padding: 28px 24px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .actionCard:hover {
   background: var(--base100);
-  border-color: var(--primary500);
+  border-color: #000000;
   border-style: solid;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 .actionIcon {
-  font-size: 32px;
-  margin-bottom: 12px;
-  filter: grayscale(0%);
+  font-size: 40px;
+  margin-bottom: 16px;
+  display: block;
+  line-height: 1;
+  opacity: 1;
+  filter: brightness(1.1) contrast(1.1);
 }
 
 .actionTitle {
-  font-weight: 600;
-  margin-bottom: 4px;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 6px;
   color: var(--font-color);
+  letter-spacing: -0.2px;
 }
 
 .actionDescription {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--font-color200);
+  line-height: 1.4;
+  font-weight: 500;
 }
 
 .recentActivity {
@@ -280,6 +289,23 @@
     grid-template-columns: 1fr;
   }
 
+  .actionCard {
+    padding: 24px 20px;
+  }
+
+  .actionIcon {
+    font-size: 48px;
+    margin-bottom: 14px;
+  }
+
+  .actionTitle {
+    font-size: 17px;
+  }
+
+  .actionDescription {
+    font-size: 14px;
+  }
+
   .statValue {
     font-size: 28px;
   }
@@ -304,5 +330,13 @@
 
   .welcomeSubtitle {
     font-size: 12px;
+  }
+
+  .actionCard {
+    padding: 28px 20px;
+  }
+
+  .actionIcon {
+    font-size: 44px;
   }
 }
